@@ -1,0 +1,112 @@
+buildscript {
+    ext.kotlin_version = '1.9.0'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.56.1"
+    }
+}
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    namespace 'com.example.asistentedecocina'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.example.asistentedecocina"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.1'
+    }
+    packaging {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    buildToolsVersion '35.0.0'
+}
+
+dependencies {
+    def composeBom = libs.androidx.compose.compose.bom.v20250301
+    implementation platform(libs.androidx.compose.compose.bom.v20250301)
+    androidTestImplementation platform(libs.androidx.compose.compose.bom.v20250301)
+
+    def compose_version = '1.5.1'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+
+    // Core Android
+    implementation libs.androidx.core.ktx.v1150
+    implementation libs.androidx.lifecycle.runtime.ktx.v287
+    implementation libs.androidx.activity.compose.v1101
+
+    // Compose
+    implementation libs.ui
+    implementation libs.ui.graphics
+    implementation libs.ui.tooling.preview
+    implementation libs.androidx.navigation.compose
+    implementation libs.androidx.lifecycle.viewmodel.compose
+
+    // Room
+    def room_version = "2.6.1"
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // Hilt
+    implementation libs.hilt.android
+    kapt libs.hilt.android.compiler
+    implementation libs.androidx.hilt.navigation.compose
+
+    // Testing
+    testImplementation libs.junit
+    testImplementation libs.mockito.core
+    testImplementation libs.mockito.kotlin
+    testImplementation libs.turbine
+    testImplementation libs.kotlinx.coroutines.test
+    testImplementation libs.kotlin.test.v190
+
+    // biblioteca estándar de Kotlin
+    implementation libs.kotlin.stdlib.jdk8
+    implementation libs.kotlin.reflect
+
+    androidTestImplementation libs.androidx.junit.v121
+    androidTestImplementation libs.androidx.espresso.core.v361
+    androidTestImplementation libs.ui.test.junit4
+    debugImplementation libs.ui.tooling
+    debugImplementation libs.ui.test.manifest
+}
